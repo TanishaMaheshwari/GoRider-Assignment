@@ -1,22 +1,20 @@
-# Use the official Python image
-FROM python:3.9-slim
+# Use the official Python image from the Docker Hub
+FROM python:3.10-slim
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy requirements file and install dependencies
-# COPY requirements.txt .
-# RUN pip install -r requirements.txt
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Copy application code
-COPY . .
+# Install the necessary Python dependencies
+RUN pip install --no-cache-dir -r requirement.txt
 
-# Set environment variables for Flask
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=development
-
-# Expose the port Flask will run on
+# Expose the port the app runs on
 EXPOSE 5000
 
+# Define the environment variable for Mongo URI (optional if you want it dynamic in the container)
+ENV MONGO_URI=mongodb://mongo:27017/mydb
+
 # Run the Flask app
-CMD ["flask", "run"]
+CMD ["python", "main.py"]
