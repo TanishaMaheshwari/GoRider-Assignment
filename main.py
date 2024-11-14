@@ -54,6 +54,25 @@ def get_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/get_user/<string:id>", methods=['GET'])
+def get_user_by_id(id):
+    mongoid = ObjectId(id)
+    user = mongodb.user_info.find_one({"_id": mongoid})
+
+    if user:
+        # Format the user data before sending the response
+        user_data = {
+            "id": str(user['_id']),
+            "uid": user['uid'],
+            "name": user['name'],
+            "email": user['email'],
+            "password": user['password'],
+            "isComplete": user['isComplete']
+        }
+        return jsonify(user_data)
+    else:
+        return jsonify({"msg": "User not found"}), 404
+
 
 @app.route("/api/put_user/<string:id>", methods=['PUT'])
 def put_user(id):
