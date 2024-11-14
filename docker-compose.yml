@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  flask_app:
+    build: .
+    ports:
+      - "5001:5000"  # Maps port 5000 on the host to port 5000 in the container
+    environment:
+      MONGO_URI: "mongodb+srv://maheshwaritanisha3802:TaNi0308@cluster0.ac3vh.mongodb.net/user_db?retryWrites=true&w=majority&tls=true"
+    depends_on:
+      - mongo
+    dns:  # Optional: sets DNS to Google's DNS to help resolve MongoDB Atlas
+      - 8.8.8.8
+
+  mongo:
+    image: mongo  # Optional local MongoDB instance if you need it for testing
+    ports:
+      - "27017:27017"  # Maps MongoDB's port for local testing if needed
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
